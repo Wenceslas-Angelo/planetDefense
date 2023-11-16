@@ -1,0 +1,11 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+canvas {
+  background: url("./src//assets/background.png") center no-repeat;
+  background-size: cover;
+}
