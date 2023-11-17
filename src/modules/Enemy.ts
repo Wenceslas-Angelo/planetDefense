@@ -49,13 +49,7 @@ class Enemy {
     this.free = true;
   }
 
-  update() {
-    if (!this.free) {
-      this.x -= this.speedX;
-      this.y -= this.speedY;
-    }
-
-    // CheckCollision between enemy / planet
+  checkCollisionWithPlanet() {
     if (
       checkCollision(
         { x: this.x, y: this.y, radius: this.radius },
@@ -68,8 +62,9 @@ class Enemy {
     ) {
       this.reset();
     }
+  }
 
-    // CheckCollision between enemy / player
+  checkCollisionWithPlayer() {
     if (
       checkCollision(
         { x: this.x, y: this.y, radius: this.radius },
@@ -82,6 +77,17 @@ class Enemy {
     ) {
       this.reset();
     }
+  }
+
+  update() {
+    if (!this.free) {
+      this.x -= this.speedX;
+      this.y -= this.speedY;
+    }
+
+    this.checkCollisionWithPlanet();
+
+    this.checkCollisionWithPlayer();
   }
 
   draw(context: CanvasRenderingContext2D) {
