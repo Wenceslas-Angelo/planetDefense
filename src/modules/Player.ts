@@ -56,6 +56,16 @@ class Player {
     }
     context.restore();
   }
+
+  getX() {
+    return this.x;
+  }
+  getY() {
+    return this.y;
+  }
+  getRadius() {
+    return this.radius;
+  }
 }
 
 export default Player;

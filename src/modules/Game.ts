@@ -1,3 +1,4 @@
+import Enemy from "./Enemy";
 import Planet from "./Planet";
 import Player from "./Player";
 import Projectile from "./Projectile";
@@ -11,20 +12,30 @@ class Game {
   debug: boolean;
   projectilePool: Projectile[];
   numberOfProjectiles: number;
+  enemyPool: Enemy[];
+  numberOfEnemies: number;
 
   constructor(canvasWidth: number, canvasHeight: number) {
     this.width = canvasWidth;
     this.height = canvasHeight;
     this.planet = new Planet(this);
     this.player = new Player(this);
+
     this.mouse = { x: 0, y: 0 };
     this.moveMouse();
+
     this.debug = false;
     this.changeDebugValue();
+
     this.projectilePool = [];
     this.numberOfProjectiles = 20;
     this.createProjectilePool();
     this.shootPlayerEvent();
+
+    this.enemyPool = [];
+    this.numberOfEnemies = 20;
+    this.createEnemyPool();
+    this.enemyPool[0].start();
   }
 
   moveMouse() {
@@ -65,6 +76,18 @@ class Game {
     }
   }
 
+  createEnemyPool() {
+    for (let i = 0; i < this.numberOfEnemies; i++) {
+      this.enemyPool.push(new Enemy(this));
+    }
+  }
+
+  getEnemy() {
+    for (let i = 0; i < this.enemyPool.length; i++) {
+      if (this.enemyPool[i].free) return this.enemyPool[i];
+    }
+  }
+
   render(context: CanvasRenderingContext2D) {
     this.planet.draw(context);
 
@@ -74,6 +97,11 @@ class Game {
     for (let projectile of this.projectilePool) {
       projectile.draw(context);
       projectile.update();
+    }
+
+    for (let enemy of this.enemyPool) {
+      enemy.draw(context);
+      enemy.update();
     }
   }
 }
