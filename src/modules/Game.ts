@@ -20,6 +20,7 @@ class Game {
   spriteTimer: number;
   spriteInterval: number;
   spriteUpdate: boolean;
+  score: number;
 
   constructor(canvasWidth: number, canvasHeight: number) {
     this.width = canvasWidth;
@@ -47,6 +48,8 @@ class Game {
     this.spriteUpdate = false;
     this.spriteTimer = 0;
     this.spriteInterval = 200;
+
+    this.score = 0;
   }
 
   moveMouse() {
@@ -99,7 +102,17 @@ class Game {
     }
   }
 
+  drawStatusText(context: CanvasRenderingContext2D) {
+    context.save();
+    context.font = "30px Impact";
+    context.textAlign = "left";
+    context.fillStyle = "white";
+    context.fillText(`SCORE: ${this.score}`, 20, 30);
+    context.restore();
+  }
+
   render(context: CanvasRenderingContext2D, deltaTime: number) {
+    this.drawStatusText(context);
     this.planet.draw(context);
 
     this.player.draw(context);

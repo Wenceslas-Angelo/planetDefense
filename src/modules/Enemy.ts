@@ -20,6 +20,7 @@ class Enemy {
   private lives: number;
   private maxLives: number;
   private angle: number;
+  private collided: boolean;
 
   constructor(
     game: Game,
@@ -44,11 +45,13 @@ class Enemy {
     this.lives = lives;
     this.maxLives = lives;
     this.angle = 0;
+    this.collided = false;
   }
 
   start() {
     this.free = false;
     this.frameX = 0;
+    this.collided = false;
     this.lives = this.maxLives;
     if (Math.random() < 0.5) {
       this.x = Math.random() * this.game.width;
@@ -88,6 +91,7 @@ class Enemy {
       this.lives = 0;
       this.speedX = 0;
       this.speedY = 0;
+      this.collided = true;
     }
   }
 
@@ -105,6 +109,7 @@ class Enemy {
       this.lives = 0;
       this.speedX = 0;
       this.speedY = 0;
+      this.collided = true;
     }
   }
 
@@ -129,20 +134,23 @@ class Enemy {
 
     if (this.lives < 1 && this.game.spriteUpdate) this.frameX++;
 
-    if (this.frameX > this.maxFrame) this.reset();
+    if (this.frameX > this.maxFrame) {
+      this.reset();
+      if (!this.collided) this.game.score += this.maxLives;
+    }
   }
 
   update() {
-    if (!this.free && this.lives >= 1) {
+    if (!this.free) {
       this.x -= this.speedX;
       this.y -= this.speedY;
+
+      this.checkCollisionWithPlanet();
+
+      this.checkCollisionWithPlayer();
+
+      this.checkCollisionWithProjectile();
     }
-
-    this.checkCollisionWithPlanet();
-
-    this.checkCollisionWithPlayer();
-
-    this.checkCollisionWithProjectile();
   }
 
   hit(damage: number) {
