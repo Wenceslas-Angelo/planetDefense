@@ -37,10 +37,12 @@ class Player {
     context.translate(this.x, this.y);
     context.rotate(this.angle);
     context.drawImage(this.image, -this.radius, -this.radius);
-    context.beginPath();
-    context.arc(0, 0, this.radius, 0, Math.PI * 2);
-    context.stroke();
-    context.strokeStyle = "white";
+    if (this.game.debug) {
+      context.beginPath();
+      context.arc(0, 0, this.radius, 0, Math.PI * 2);
+      context.stroke();
+      context.strokeStyle = "white";
+    }
     context.restore();
   }
 }

@@ -7,6 +7,7 @@ class Game {
   planet: Planet;
   player: Player;
   mouse: { x: number; y: number };
+  debug: boolean;
 
   constructor(canvasWidth: number, canvasHeight: number) {
     this.width = canvasWidth;
@@ -15,12 +16,22 @@ class Game {
     this.player = new Player(this);
     this.mouse = { x: 0, y: 0 };
     this.moveMouse();
+    this.debug = false;
+    this.changeDebugValue();
   }
 
   moveMouse() {
     window.addEventListener("mousemove", (event) => {
       this.mouse.x = event.offsetX;
       this.mouse.y = event.offsetY;
+    });
+  }
+
+  changeDebugValue() {
+    window.addEventListener("keyup", (event) => {
+      if (event.key === "d") {
+        this.debug = !this.debug;
+      }
     });
   }
 

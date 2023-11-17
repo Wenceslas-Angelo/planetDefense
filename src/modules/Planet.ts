@@ -19,12 +19,15 @@ class Planet {
 
   draw(context: CanvasRenderingContext2D) {
     context.drawImage(this.image, this.x - 100, this.y - 100);
-    context.beginPath();
-    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    context.moveTo(this.x, this.y);
-    context.lineTo(this.game.mouse.x, this.game.mouse.y);
-    context.stroke();
-    context.strokeStyle = "white";
+
+    if (this.game.debug) {
+      context.beginPath();
+      context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      context.moveTo(this.x, this.y);
+      context.lineTo(this.game.mouse.x, this.game.mouse.y);
+      context.stroke();
+      context.strokeStyle = "white";
+    }
   }
 
   getX() {
