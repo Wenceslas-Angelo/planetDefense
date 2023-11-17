@@ -37,7 +37,7 @@ class Game {
     this.enemyPool = [];
     this.numberOfEnemies = 20;
     this.createEnemyPool();
-    this.enemyInterval = 3000;
+    this.enemyInterval = 1000;
     this.enemyTimer = 0;
   }
 

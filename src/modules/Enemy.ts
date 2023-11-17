@@ -27,8 +27,16 @@ class Enemy {
 
   start() {
     this.free = false;
-    this.x = Math.random() * this.game.width;
-    this.y = Math.random() * this.game.height;
+
+    if (Math.random() < 0.5) {
+      this.x = Math.random() * this.game.width;
+      this.y =
+        Math.random() < 0.5 ? -this.radius : this.game.height + this.radius;
+    } else {
+      this.x =
+        Math.random() < 0.5 ? -this.radius : this.game.width + this.radius;
+      this.y = Math.random() * this.game.height;
+    }
     const aim = calcAim(
       { x: this.x, y: this.y },
       { x: this.game.planet.getX(), y: this.game.planet.getY() }
@@ -74,15 +82,6 @@ class Enemy {
     ) {
       this.reset();
     }
-
-    if (
-      this.x < 0 ||
-      this.x > this.game.width ||
-      this.y < 0 ||
-      this.y > this.game.height
-    ) {
-      this.reset();
-    }
   }
 
   draw(context: CanvasRenderingContext2D) {
@@ -91,6 +90,7 @@ class Enemy {
       context.beginPath();
       context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       context.stroke();
+      context.strokeStyle = "white";
       // context.restore();
     }
   }
