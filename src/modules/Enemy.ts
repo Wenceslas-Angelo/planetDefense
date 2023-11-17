@@ -19,6 +19,7 @@ class Enemy {
   private maxFrame: number;
   private lives: number;
   private maxLives: number;
+  private angle: number;
 
   constructor(
     game: Game,
@@ -42,6 +43,7 @@ class Enemy {
     this.maxFrame = maxFrame;
     this.lives = lives;
     this.maxLives = lives;
+    this.angle = 0;
   }
 
   start() {
@@ -63,6 +65,7 @@ class Enemy {
     );
     this.speedX = aim[0];
     this.speedY = aim[1];
+    this.angle = Math.atan2(aim[3], aim[2]) + Math.PI * 0.5;
   }
 
   reset() {
@@ -130,7 +133,7 @@ class Enemy {
   }
 
   update() {
-    if (!this.free) {
+    if (!this.free && this.lives >= 1) {
       this.x -= this.speedX;
       this.y -= this.speedY;
     }
@@ -149,14 +152,17 @@ class Enemy {
 
   draw(context: CanvasRenderingContext2D) {
     if (!this.free) {
+      context.save();
+      context.translate(this.x, this.y);
+      context.rotate(this.angle);
       context.drawImage(
         this.image,
         this.frameX * this.width,
         this.frameY * this.height,
         this.width,
         this.height,
-        this.x - this.radius,
-        this.y - this.radius,
+        -this.radius,
+        -this.radius,
         this.width,
         this.height
       );
@@ -165,12 +171,13 @@ class Enemy {
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         context.stroke();
         context.strokeStyle = "white";
-        context.fillText(`${this.lives}`, this.x, this.y);
+        context.fillText(`${this.lives}`, 0, 0);
         context.fillStyle = "white";
         context.font = "50px Helvetica";
         context.textBaseline = "middle";
         context.textAlign = "center";
       }
+      context.restore();
     }
   }
 }
