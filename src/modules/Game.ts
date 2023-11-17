@@ -14,6 +14,8 @@ class Game {
   numberOfProjectiles: number;
   enemyPool: Enemy[];
   numberOfEnemies: number;
+  enemyInterval: number;
+  enemyTimer: number;
 
   constructor(canvasWidth: number, canvasHeight: number) {
     this.width = canvasWidth;
@@ -35,7 +37,8 @@ class Game {
     this.enemyPool = [];
     this.numberOfEnemies = 20;
     this.createEnemyPool();
-    this.enemyPool[0].start();
+    this.enemyInterval = 3000;
+    this.enemyTimer = 0;
   }
 
   moveMouse() {
@@ -88,7 +91,7 @@ class Game {
     }
   }
 
-  render(context: CanvasRenderingContext2D) {
+  render(context: CanvasRenderingContext2D, deltaTime: number) {
     this.planet.draw(context);
 
     this.player.draw(context);
@@ -102,6 +105,16 @@ class Game {
     for (let enemy of this.enemyPool) {
       enemy.draw(context);
       enemy.update();
+    }
+
+    if (this.enemyTimer < this.enemyInterval) {
+      this.enemyTimer += deltaTime;
+    } else {
+      this.enemyTimer = 0;
+      const enemy = this.getEnemy();
+      if (enemy) {
+        enemy.start();
+      }
     }
   }
 }
