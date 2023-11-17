@@ -29,6 +29,8 @@ class Projectile {
 
   reset() {
     this.free = true;
+    this.x = 0;
+    this.y = 0;
   }
 
   update() {
@@ -56,6 +58,16 @@ class Projectile {
       context.fillStyle = "red";
       // context.restore();
     }
+  }
+
+  getX() {
+    return this.x;
+  }
+  getY() {
+    return this.y;
+  }
+  getRadius() {
+    return this.radius;
   }
 }
 

@@ -47,6 +47,8 @@ class Enemy {
 
   reset() {
     this.free = true;
+    this.x = 0;
+    this.y = 0;
   }
 
   checkCollisionWithPlanet() {
@@ -79,6 +81,25 @@ class Enemy {
     }
   }
 
+  checkCollisionWithProjectile() {
+    for (let projectile of this.game.projectilePool) {
+      if (
+        !projectile.free &&
+        checkCollision(
+          { x: this.x, y: this.y, radius: this.radius },
+          {
+            x: projectile.getX(),
+            y: projectile.getY(),
+            radius: projectile.getRadius(),
+          }
+        )
+      ) {
+        projectile.reset();
+        this.reset();
+      }
+    }
+  }
+
   update() {
     if (!this.free) {
       this.x -= this.speedX;
@@ -88,6 +109,8 @@ class Enemy {
     this.checkCollisionWithPlanet();
 
     this.checkCollisionWithPlayer();
+
+    this.checkCollisionWithProjectile();
   }
 
   draw(context: CanvasRenderingContext2D) {
