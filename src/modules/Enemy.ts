@@ -82,7 +82,9 @@ class Enemy {
         }
       )
     ) {
-      this.reset();
+      this.lives = 0;
+      this.speedX = 0;
+      this.speedY = 0;
     }
   }
 
@@ -97,7 +99,9 @@ class Enemy {
         }
       )
     ) {
-      this.reset();
+      this.lives = 0;
+      this.speedX = 0;
+      this.speedY = 0;
     }
   }
 
@@ -112,13 +116,15 @@ class Enemy {
             y: projectile.getY(),
             radius: projectile.getRadius(),
           }
-        )
+        ) &&
+        this.lives >= 1
       ) {
         projectile.reset();
         this.hit(1);
       }
     }
-    if (this.lives < 1) this.frameX++;
+
+    if (this.lives < 1 && this.game.spriteUpdate) this.frameX++;
 
     if (this.frameX > this.maxFrame) this.reset();
   }
@@ -138,6 +144,7 @@ class Enemy {
 
   hit(damage: number) {
     this.lives -= damage;
+    if (this.lives >= 1) this.frameX++;
   }
 
   draw(context: CanvasRenderingContext2D) {

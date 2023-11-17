@@ -1,5 +1,5 @@
-import Asteroid from "./Asteroid";
 import Enemy from "./Enemy";
+import Lobstermorph from "./Lobstermorph";
 import Planet from "./Planet";
 import Player from "./Player";
 import Projectile from "./Projectile";
@@ -17,6 +17,9 @@ class Game {
   numberOfEnemies: number;
   enemyInterval: number;
   enemyTimer: number;
+  spriteTimer: number;
+  spriteInterval: number;
+  spriteUpdate: boolean;
 
   constructor(canvasWidth: number, canvasHeight: number) {
     this.width = canvasWidth;
@@ -40,6 +43,10 @@ class Game {
     this.createEnemyPool();
     this.enemyInterval = 5000;
     this.enemyTimer = 0;
+
+    this.spriteUpdate = false;
+    this.spriteTimer = 0;
+    this.spriteInterval = 200;
   }
 
   moveMouse() {
@@ -82,7 +89,7 @@ class Game {
 
   createEnemyPool() {
     for (let i = 0; i < this.numberOfEnemies; i++) {
-      this.enemyPool.push(new Asteroid(this));
+      this.enemyPool.push(new Lobstermorph(this));
     }
   }
 
@@ -116,6 +123,14 @@ class Game {
       if (enemy) {
         enemy.start();
       }
+    }
+
+    if (this.spriteTimer < this.spriteInterval) {
+      this.spriteTimer += deltaTime;
+      this.spriteUpdate = false;
+    } else {
+      this.spriteTimer = 0;
+      this.spriteUpdate = true;
     }
   }
 }
