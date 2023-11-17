@@ -4,7 +4,7 @@ import asteroidImage from "../assets/asteroid.png";
 
 class Asteroid extends Enemy {
   constructor(game: Game) {
-    super(game, asteroidImage);
+    super(game, asteroidImage, Math.floor(Math.random() * 4), 5, 7);
   }
 }
 

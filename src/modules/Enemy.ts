@@ -1,33 +1,53 @@
 import { calcAim } from "../utils/calcAim";
 import { checkCollision } from "../utils/checkCollision";
+import { createImage } from "../utils/createImage";
 import Game from "./Game";
 
 class Enemy {
   private x: number;
   private y: number;
-  //   private width: number;
-  //   private height: number;
+  private width: number;
+  private height: number;
   private radius: number;
+  private image: HTMLImageElement;
   game: Game;
   free: boolean;
   private speedX: number;
   private speedY: number;
+  private frameY: number;
+  private frameX: number;
+  private maxFrame: number;
+  private lives: number;
+  private maxLives: number;
 
-  constructor(game: Game) {
+  constructor(
+    game: Game,
+    imageSrc: string,
+    frameY: number,
+    lives: number,
+    maxFrame: number
+  ) {
     this.game = game;
     this.x = 0;
     this.y = 0;
-    this.radius = 50;
-    // this.width = this.radius * 2;
-    // this.height = this.radius * 2;
+    this.radius = 40;
+    this.image = createImage(imageSrc);
+    this.width = this.radius * 2;
+    this.height = this.radius * 2;
     this.free = true;
     this.speedX = 0;
     this.speedY = 0;
+    this.frameY = frameY;
+    this.frameX = 0;
+    this.maxFrame = maxFrame;
+    this.lives = lives;
+    this.maxLives = lives;
   }
 
   start() {
     this.free = false;
-
+    this.frameX = 0;
+    this.lives = this.maxLives;
     if (Math.random() < 0.5) {
       this.x = Math.random() * this.game.width;
       this.y =
@@ -95,9 +115,12 @@ class Enemy {
         )
       ) {
         projectile.reset();
-        this.reset();
+        this.hit(1);
       }
     }
+    if (this.lives < 1) this.frameX++;
+
+    if (this.frameX > this.maxFrame) this.reset();
   }
 
   update() {
@@ -113,14 +136,34 @@ class Enemy {
     this.checkCollisionWithProjectile();
   }
 
+  hit(damage: number) {
+    this.lives -= damage;
+  }
+
   draw(context: CanvasRenderingContext2D) {
     if (!this.free) {
-      // context.save();
-      context.beginPath();
-      context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      context.stroke();
-      context.strokeStyle = "white";
-      // context.restore();
+      context.drawImage(
+        this.image,
+        this.frameX * this.width,
+        this.frameY * this.height,
+        this.width,
+        this.height,
+        this.x - this.radius,
+        this.y - this.radius,
+        this.width,
+        this.height
+      );
+      if (this.game.debug) {
+        context.beginPath();
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        context.stroke();
+        context.strokeStyle = "white";
+        context.fillText(`${this.lives}`, this.x, this.y);
+        context.fillStyle = "white";
+        context.font = "50px Helvetica";
+        context.textBaseline = "middle";
+        context.textAlign = "center";
+      }
     }
   }
 }

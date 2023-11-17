@@ -1,3 +1,4 @@
+import Asteroid from "./Asteroid";
 import Enemy from "./Enemy";
 import Planet from "./Planet";
 import Player from "./Player";
@@ -37,7 +38,7 @@ class Game {
     this.enemyPool = [];
     this.numberOfEnemies = 20;
     this.createEnemyPool();
-    this.enemyInterval = 1000;
+    this.enemyInterval = 5000;
     this.enemyTimer = 0;
   }
 
@@ -81,7 +82,7 @@ class Game {
 
   createEnemyPool() {
     for (let i = 0; i < this.numberOfEnemies; i++) {
-      this.enemyPool.push(new Enemy(this));
+      this.enemyPool.push(new Asteroid(this));
     }
   }
 
